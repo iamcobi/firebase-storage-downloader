@@ -9,11 +9,12 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import { cn } from '@/lib/utils';
 import { navLinks, HOME_CTA_TEXT } from '@/lib/constants';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 
 export default function StickyHeader() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const isMobile = useIsMobile(); // This hook usage remains the same
+  const isMobile = useIsMobile(); // Hook now returns null initially
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -41,58 +42,67 @@ export default function StickyHeader() {
           <span className="text-lg font-bold">Cobi Automation</span>
         </Link>
 
-        {/* Desktop Navigation */}
-        {!isMobile && ( // Conditionally render desktop nav
-          <nav className="hidden items-center gap-6 md:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Button asChild size="sm">
-              <Link href="/contact">{HOME_CTA_TEXT}</Link>
-            </Button>
-          </nav>
-        )}
-
-
-        {/* Mobile Navigation Trigger */}
-        {isMobile && ( // Conditionally render mobile trigger
-          <div className="md:hidden">
-            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Menu className="h-6 w-6" />
-                  <span className="sr-only">Toggle Menu</span>
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] pt-10">
-                <nav className="flex flex-col gap-6">
-                  {navLinks.map((link) => (
-                    <SheetClose asChild key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-lg font-medium text-foreground hover:text-primary"
-                        onClick={handleLinkClick}
-                      >
-                        {link.label}
-                      </Link>
-                    </SheetClose>
-                  ))}
-                  <SheetClose asChild>
-                      <Button asChild size="lg" className="mt-4">
-                          <Link href="/contact" onClick={handleLinkClick}>{HOME_CTA_TEXT}</Link>
-                      </Button>
-                  </SheetClose>
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
+        {/* Navigation Area - Handles null state */}
+        <div className="flex items-center">
+          {isMobile === null ? (
+            // Render placeholder Skeleton while determining mobile state
+            <div className="flex items-center gap-6">
+                <Skeleton className="hidden h-5 w-16 md:block" />
+                <Skeleton className="hidden h-5 w-16 md:block" />
+                <Skeleton className="hidden h-5 w-16 md:block" />
+                <Skeleton className="hidden h-9 w-32 md:block" />
+                <Skeleton className="h-9 w-9 md:hidden" /> {/* Mobile trigger placeholder */}
+            </div>
+          ) : !isMobile ? (
+            // Desktop Navigation
+            <nav className="hidden items-center gap-6 md:flex">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Button asChild size="sm">
+                <Link href="/contact">{HOME_CTA_TEXT}</Link>
+              </Button>
+            </nav>
+          ) : (
+             // Mobile Navigation Trigger (only rendered when isMobile is true)
+            <div className="md:hidden">
+               <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+                 <SheetTrigger asChild>
+                   <Button variant="ghost" size="icon">
+                     <Menu className="h-6 w-6" />
+                     <span className="sr-only">Toggle Menu</span>
+                   </Button>
+                 </SheetTrigger>
+                 <SheetContent side="right" className="w-[280px] pt-10">
+                   <nav className="flex flex-col gap-6">
+                     {navLinks.map((link) => (
+                       <SheetClose asChild key={link.href}>
+                         <Link
+                           href={link.href}
+                           className="text-lg font-medium text-foreground hover:text-primary"
+                           onClick={handleLinkClick}
+                         >
+                           {link.label}
+                         </Link>
+                       </SheetClose>
+                     ))}
+                     <SheetClose asChild>
+                         <Button asChild size="lg" className="mt-4">
+                             <Link href="/contact" onClick={handleLinkClick}>{HOME_CTA_TEXT}</Link>
+                         </Button>
+                     </SheetClose>
+                   </nav>
+                 </SheetContent>
+               </Sheet>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );

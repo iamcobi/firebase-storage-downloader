@@ -5,26 +5,24 @@ import { useState, useEffect } from 'react';
 
 const MOBILE_BREAKPOINT = 768; // Corresponds to Tailwind's 'md' breakpoint
 
-export function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(false); // Default to false or check on mount
+// Returns null initially, then boolean after client-side check
+export function useIsMobile(): boolean | null {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null); // Initialize with null
 
   useEffect(() => {
-    // Initial check
+    // This effect runs only on the client after the initial render
     const checkDevice = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     };
-    checkDevice(); // Run on mount
+
+    checkDevice(); // Set the initial state based on window size
 
     // Add resize listener
-    const handleResize = () => {
-      checkDevice();
-    };
-
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', checkDevice);
 
     // Cleanup listener on component unmount
-    return () => window.removeEventListener('resize', handleResize);
-  }, []); // Empty dependency array ensures this runs only on mount and unmount
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   return isMobile;
 }
