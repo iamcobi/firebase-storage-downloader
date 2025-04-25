@@ -25,6 +25,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
+        // Add suppressHydrationWarning to handle potential mismatches caused by extensions
+        suppressHydrationWarning={true}
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           inter.variable
