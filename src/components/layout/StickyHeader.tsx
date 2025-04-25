@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 export default function StickyHeader() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [hasMounted, setHasMounted] = React.useState(false); // New state
   const isMobile = useIsMobile(); // Hook now returns null initially
 
   React.useEffect(() => {
@@ -23,6 +24,11 @@ export default function StickyHeader() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  React.useEffect(() => {
+    setHasMounted(true); // Set mounted state on client
+  }, []);
+
 
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false);
@@ -44,7 +50,7 @@ export default function StickyHeader() {
 
         {/* Navigation Area - Handles null state */}
         <div className="flex items-center">
-          {isMobile === null ? (
+          {!hasMounted || isMobile === null ? ( // Check hasMounted as well
             // Render placeholder Skeleton while determining mobile state
             <div className="flex items-center gap-6">
                 <Skeleton className="hidden h-5 w-16 md:block" />
