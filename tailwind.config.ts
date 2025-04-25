@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+            sans: ["var(--font-inter)", "sans-serif"], // Set Inter as default sans-serif
+        },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -21,11 +24,11 @@ export default {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				DEFAULT: 'hsl(var(--primary))', // Electric Blue
+  				foreground: 'hsl(var(--primary-foreground))' // White text on blue
   			},
   			secondary: {
-  				DEFAULT: 'hsl(var(--secondary))',
+  				DEFAULT: 'hsl(var(--secondary))', // Light Gray
   				foreground: 'hsl(var(--secondary-foreground))'
   			},
   			muted: {
@@ -33,7 +36,7 @@ export default {
   				foreground: 'hsl(var(--muted-foreground))'
   			},
   			accent: {
-  				DEFAULT: 'hsl(var(--accent))',
+  				DEFAULT: 'hsl(var(--accent))', // Was light gray, could reuse primary for hover states if needed
   				foreground: 'hsl(var(--accent-foreground))'
   			},
   			destructive: {
@@ -42,7 +45,7 @@ export default {
   			},
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
-  			ring: 'hsl(var(--ring))',
+  			ring: 'hsl(var(--ring))', // Electric Blue for focus
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
@@ -50,6 +53,7 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
+        // Sidebar colors remain default, can be removed if not using sidebar component
   			sidebar: {
   				DEFAULT: 'hsl(var(--sidebar-background))',
   				foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,9 +66,9 @@ export default {
   			}
   		},
   		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
+  			lg: 'var(--radius)', // 0.5rem
+  			md: 'calc(var(--radius) - 2px)', // 0.375rem
+  			sm: 'calc(var(--radius) - 4px)' // 0.25rem
   		},
   		keyframes: {
   			'accordion-down': {
@@ -82,13 +86,22 @@ export default {
   				to: {
   					height: '0'
   				}
-  			}
+  			},
+            // FadeIn animation (optional, can be used with animate-fadeIn class)
+            fadeIn: {
+                 "0%": { opacity: "0", transform: "translateY(10px)" },
+                 "100%": { opacity: "1", transform: "translateY(0)" },
+            },
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+            fadeIn: 'fadeIn 0.5s ease-out forwards',
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+   plugins: [
+        require("tailwindcss-animate"),
+        require('@tailwindcss/typography'), // Add typography plugin
+    ],
 } satisfies Config;
