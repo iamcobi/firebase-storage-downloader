@@ -26,6 +26,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body
         // Add suppressHydrationWarning to handle potential mismatches caused by extensions
+        // like the __processed_... attribute seen in error logs.
         suppressHydrationWarning={true}
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
