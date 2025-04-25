@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -12,7 +13,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 export default function StickyHeader() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const isMobile = useIsMobile();
+  const isMobile = useIsMobile(); // This hook usage remains the same
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -41,52 +42,57 @@ export default function StickyHeader() {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-6 md:flex">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Button asChild size="sm">
-            <Link href="/contact">{HOME_CTA_TEXT}</Link>
-          </Button>
-        </nav>
+        {!isMobile && ( // Conditionally render desktop nav
+          <nav className="hidden items-center gap-6 md:flex">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
+              >
+                {link.label}
+              </Link>
+            ))}
+            <Button asChild size="sm">
+              <Link href="/contact">{HOME_CTA_TEXT}</Link>
+            </Button>
+          </nav>
+        )}
 
-        {/* Mobile Navigation */}
-        <div className="md:hidden">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[280px] pt-10">
-              <nav className="flex flex-col gap-6">
-                {navLinks.map((link) => (
-                  <SheetClose asChild key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-lg font-medium text-foreground hover:text-primary"
-                      onClick={handleLinkClick}
-                    >
-                      {link.label}
-                    </Link>
+
+        {/* Mobile Navigation Trigger */}
+        {isMobile && ( // Conditionally render mobile trigger
+          <div className="md:hidden">
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Toggle Menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[280px] pt-10">
+                <nav className="flex flex-col gap-6">
+                  {navLinks.map((link) => (
+                    <SheetClose asChild key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-lg font-medium text-foreground hover:text-primary"
+                        onClick={handleLinkClick}
+                      >
+                        {link.label}
+                      </Link>
+                    </SheetClose>
+                  ))}
+                  <SheetClose asChild>
+                      <Button asChild size="lg" className="mt-4">
+                          <Link href="/contact" onClick={handleLinkClick}>{HOME_CTA_TEXT}</Link>
+                      </Button>
                   </SheetClose>
-                ))}
-                 <SheetClose asChild>
-                    <Button asChild size="lg" className="mt-4">
-                        <Link href="/contact" onClick={handleLinkClick}>{HOME_CTA_TEXT}</Link>
-                    </Button>
-                 </SheetClose>
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </div>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
       </div>
     </header>
   );
