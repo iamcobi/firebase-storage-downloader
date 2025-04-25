@@ -4,7 +4,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import StickyHeader from '@/components/layout/StickyHeader';
 import Footer from '@/components/layout/Footer';
-import { Toaster } from "@/components/ui/toaster"; // Import Toaster
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,7 +37,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </div>
-        <Toaster /> {/* Add Toaster component here */}
+        <Toaster />
       </body>
     </html>
   );
